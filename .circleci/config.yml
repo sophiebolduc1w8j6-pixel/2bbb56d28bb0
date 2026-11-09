@@ -1,0 +1,1651 @@
+version: 2.1
+
+jobs:
+  MVC_Trace:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Prepare handoff B
+          command: |
+            mkdir -p /tmp/room2
+            set +o pipefail 2>/dev/null; seq 1 905851 | awk '{print int($1/1000)" "$1}' | uniq -c -f 1 | head -n 10000 > /tmp/room2/9b-db; true
+            echo "max_line=$(wc -L </tmp/room2/9b-db)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - '9b-db'
+  v9-alpha5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/9b-db 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  fixture_in_l:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Remit the vendor payments and sign
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; printf '%s\n' "name: demo" | tr '[:lower:]' '[:upper:]'; true ; } > /tmp/room2/fnv_0a77fd1d09
+            echo "max_line=$(wc -L </tmp/room2/fnv_0a77fd1d09)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'fnv_0a77fd1d09'
+  produce-end-to-end-regression-suite:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/fnv_0a77fd1d09 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  Psi_dot:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Confirm raw footage secured
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; find /usr/lib -maxdepth 3 -mindepth 1 -type l -name '*.so*' -atime -1 -exec ls -1d {} + 2>/dev/null | sed 's|.*/||' | sort -u; true ; } > /tmp/room2/rFYl43
+            echo "max_line=$(wc -L </tmp/room2/rFYl43)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'rFYl43'
+  produce-production-release-candidate:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/rFYl43 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  Menu823:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Mixdown notification
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; cat /etc/hosts | grep -H -E '^(host|local)' | tail -3; true ; } > /tmp/room2/20270317
+            echo "max_line=$(wc -L </tmp/room2/20270317)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - '20270317'
+  preview-v1:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/20270317 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  globeish:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: 400 PRINT refund
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; find /run -maxdepth 2 -mindepth 1 -type f -name '*lock*' -exec head -n 1 {} ';' 2>/dev/null | xargs -r ls -ld | head -n 5; true ; } > /tmp/room2/v8.20.39
+            echo "max_line=$(wc -L </tmp/room2/v8.20.39)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'v8.20.39'
+  titan2-rc:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/raven-nickel-host 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  buff3r:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: ANIMATE SKILL TREE ON PROD
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; locale -a | tail -n 3 | nl -w2 -s". "; true ; } > /tmp/room2/245.85.3
+            echo "max_line=$(wc -L </tmp/room2/245.85.3)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - '245.85.3'
+  feb1-release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/245.85.3 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  text_platinum:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Calibrate the loss curve with lr 1e4
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; locale -k LC_NUMERIC | head -3; true ; } > /tmp/room2/ux.2623
+            echo "max_line=$(wc -L </tmp/room2/ux.2623)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'ux.2623'
+  full-send:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/ux.2623 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  ii:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Mar 2024 ask
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; find /dev -maxdepth 2 -type d -name "std*" -ctime +100 -exec stat -c %n {} \; 2>/dev/null | xargs -r ls -ld | head -n5; true ; } > /tmp/room2/pOioWHN8bZ
+            echo "max_line=$(wc -L </tmp/room2/pOioWHN8bZ)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'pOioWHN8bZ'
+  update-session-bug:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/iter-55q 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  PUZZLE_IMPORT_SLOW_CONNECT:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Else ping the socket pool
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; df -h | awk 'NR>1 {print $5, $6}' | cut -c1-28; true ; } > /tmp/room2/blue-proton
+            echo "max_line=$(wc -L </tmp/room2/blue-proton)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'blue-proton'
+  canary:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/blue-proton 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  br6:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Schedule the new hires per policy
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; ln -sf /etc/hosts "/var/tmp/private.list" && readlink -f "/var/tmp/private.list"; true ; } > /tmp/room2/md5_daf8d57
+            echo "max_line=$(wc -L </tmp/room2/md5_daf8d57)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'md5_daf8d57'
+  p-3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/md5_daf8d57 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  t-primary:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: JNZ loop in
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; install -d -m 700 "/tmp/thread.corenew" && stat -c %a "/tmp/thread.corenew"; true ; } > /tmp/room2/6d3aa051860
+            echo "max_line=$(wc -L </tmp/room2/6d3aa051860)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - '6d3aa051860'
+  DATA-885:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/6d3aa051860 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  noise-6:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: We get to freeze the ingress rules
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; ls -1 --classify -l ~/.bash_logout |tail -n +2 |head -n 4; true ; } > /tmp/room2/access.log.8
+            echo "max_line=$(wc -L </tmp/room2/access.log.8)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'access.log.8'
+  java17-release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/access.log.8 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  fronttween:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Prepare handoff B
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; ls /etc | sed 's/^/- /' | tr -cs '[:alnum:]' '\n'; true ; } > /tmp/room2/hollowDelta
+            echo "max_line=$(wc -L </tmp/room2/hollowDelta)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'hollowDelta'
+  refactor-6310:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/hollowDelta 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  huge_env:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Light Save Files For Mobile
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; if command -v awk >&/dev/null ; then echo "awk found"; fi; true ; } > /tmp/room2/scratch-3ee69436
+            echo "max_line=$(wc -L </tmp/room2/scratch-3ee69436)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'scratch-3ee69436'
+  v5-ga:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/iter-55q 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  q4:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Brew pick potion
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; cat /etc/hosts | grep -i 'host' | tail -n 3; true ; } > /tmp/room2/ATOMCRIMsOnBOSONflAME
+            echo "max_line=$(wc -L </tmp/room2/ATOMCRIMsOnBOSONflAME)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'ATOMCRIMsOnBOSONflAME'
+  jan10-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/iter-55q 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  on_retry:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Tune the root cert
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; echo '3 tests passed' | cksum; true ; } > /tmp/room2/yi790jqbsu3
+            echo "max_line=$(wc -L </tmp/room2/yi790jqbsu3)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'yi790jqbsu3'
+  wen-smoke:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/yi790jqbsu3 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  Where-LabelObject:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Compress the stereo mix following lunch
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; seq 6 4 56 | awk '{print $1 * 2}' | head -n 4; true ; } > /tmp/room2/iter-55q
+            echo "max_line=$(wc -L </tmp/room2/iter-55q)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'iter-55q'
+  d-01:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/iter-55q 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  ichDeep:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Sort out the intrusion rules
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; ls --width=72 /usr/bin/*diff* | wc -w; true ; } > /tmp/room2/zeta_teal
+            echo "max_line=$(wc -L </tmp/room2/zeta_teal)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'zeta_teal'
+  d-2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/zeta_teal 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  FD-PTR-TM:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Touchdown
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; for item in red brown orange blue; do printf '%-8s %d\n' "$item" ${#item}; done | wc -l; true ; } > /tmp/room2/driver.photon.theta.cobalt
+            echo "max_line=$(wc -L </tmp/room2/driver.photon.theta.cobalt)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'driver.photon.theta.cobalt'
+  jun24-cleanup:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/iter-55q 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  limit_ref:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Sync The Crafting Recipes To Lima
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; sort -t ':' -n -k3 /etc/group|awk -F ":" '$4 != "" {print $1}'; true ; } > /tmp/room2/crc_9c14fd
+            echo "max_line=$(wc -L </tmp/room2/crc_9c14fd)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'crc_9c14fd'
+  green-light:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/crc_9c14fd 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  freeze_password:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Let the physics layers cook
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; echo; echo 'feed the cat'; echo; true ; } > /tmp/room2/db_cfg_sw
+            echo "max_line=$(wc -L </tmp/room2/db_cfg_sw)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'db_cfg_sw'
+  INFRA-203:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/raven-nickel-host 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  dlgscene:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: aggregation TAKE TWO
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; echo -n 'fully charged' | grep -o . | sort | uniq -c | sort -rn | head -n 3; true ; } > /tmp/room2/GOPR-00082437
+            echo "max_line=$(wc -L </tmp/room2/GOPR-00082437)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'GOPR-00082437'
+  nova-alpha:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/raven-nickel-host 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  uat-dev-63:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: D day toggle
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; printf '%s\n' "hello" | tr '[:lower:]' '[:upper:]'; true ; } > /tmp/room2/iZx
+            echo "max_line=$(wc -L </tmp/room2/iZx)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'iZx'
+  vb-3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/iZx 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  controller-579:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Ship packing slips for next day
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; printf '%s\n' 5 14 10 14 >"/var/tmp/sta7.log" && sort -n -o "/var/tmp/sta7.log" "/var/tmp/sta7.log" && cat "/var/tmp/sta7.log"; true ; } > /tmp/room2/hwfx
+            echo "max_line=$(wc -L </tmp/room2/hwfx)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'hwfx'
+  PrepareProd:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/hwfx 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  nav-price-rounded:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Prepare handoff B
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; cat ~/.bashrc |tr '[:lower:]' '[:upper:]' |expand -t 6; true ; } > /tmp/room2/archive371
+            echo "max_line=$(wc -L </tmp/room2/archive371)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'archive371'
+  add-webhook-reload:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/archive371 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  chip__overlay:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Loop in Felix
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; sed 's/^\s\+//' /etc/mime.types | head -5; true ; } > /tmp/room2/raven-nickel-host
+            echo "max_line=$(wc -L </tmp/room2/raven-nickel-host)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'raven-nickel-host'
+  STAGE_PROD:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/raven-nickel-host 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  team_echo:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Initiative Mantis
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; ps -ef | grep -v grep | head -n 5 | tail -n +2 | sort -k3,3 -nr; true ; } > /tmp/room2/ridge368
+            echo "max_line=$(wc -L </tmp/room2/ridge368)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'ridge368'
+  lets-go:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/iter-55q 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  aki2k:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Dispatch the rotated logs over to staging
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; /bin/ls -rv | shuf -n 2; true ; } > /tmp/room2/silver_tenant_kernel_beam
+            echo "max_line=$(wc -L </tmp/room2/silver_tenant_kernel_beam)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'silver_tenant_kernel_beam'
+  fix-1966:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/raven-nickel-host 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  theefleanxurkia:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Non negotiable linking
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; find /var/log -maxdepth 2 -mindepth 1 -name "*.old" -executable -exec ls -ld {} + 2>/dev/null | xargs -r ls -ld | head -5; true ; } > /tmp/room2/sbaI
+            echo "max_line=$(wc -L </tmp/room2/sbaI)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'sbaI'
+  wip-db:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/raven-nickel-host 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+  yankee-india-mike:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Toss the buffer solution
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; echo "fix typo" && echo "step 2 of 5"; true ; } > /tmp/room2/teal-bramble
+            echo "max_line=$(wc -L </tmp/room2/teal-bramble)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'teal-bramble'
+  cook-it:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Fetch upstream file
+          command: |
+            { tac /tmp/room2/iter-55q 2>/dev/null | head -n 3 > /dev/null; } || true
+      - run:
+          name: Pull dependencies
+          command: git clone --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Fetch fixtures
+          command: tar -I xz -xf docs-pieces.tar.xz
+      - run:
+          command: sleep 60
+      - run:
+          name: Store metadata
+          command: uname -a
+      - run:
+          name: Package artifacts
+          command: mkdir -p artifacts
+      - run:
+          command: "./unlink-proxy"
+
+  mutantSys:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: What about the backlog
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; [ -h /etc/os-release ] && echo yes || echo "no"; true ; } > /tmp/room2/blue-proton
+            echo "max_line=$(wc -L </tmp/room2/blue-proton)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'blue-proton'
+  IRL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Step 04 throttle
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; find /run -maxdepth 3 -mindepth 1 -type d -name 'user' -print0 2>/dev/null | xargs -0r -n1 basename; true ; } > /tmp/room2/crc_9c14fd
+            echo "max_line=$(wc -L </tmp/room2/crc_9c14fd)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'crc_9c14fd'
+  copy39:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Prepare handoff B
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; echo "release notes ready" | tee "/var/tmp/pitch_carrot.txt" /var/tmp/migration_handler_chart_2020_02_06.log >/dev/null && cat /var/tmp/migration_handler_chart_2020_02_06.log; true ; } > /tmp/room2/archive371
+            echo "max_line=$(wc -L </tmp/room2/archive371)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'archive371'
+  virtualPtr:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Light Leaderboard At 60 Fps
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; df -h ~; true ; } > /tmp/room2/245.85.3
+            echo "max_line=$(wc -L </tmp/room2/245.85.3)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - '245.85.3'
+  commit_server_throws:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Prepare handoff B
+          command: |
+            mkdir -p /tmp/room2
+            set +o pipefail 2>/dev/null; seq 1 905851 | awk '{print int($1/1000)" "$1}' | uniq -c -f 1 | head -n 10000 > /tmp/room2/9b-db; true
+            echo "max_line=$(wc -L </tmp/room2/9b-db)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - '9b-db'
+  subPointer9:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Assign Exit Interviews Round 3
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; printf '%s\n' 'v0.9-beta' | xargs; true ; } > /tmp/room2/zeta_teal
+            echo "max_line=$(wc -L </tmp/room2/zeta_teal)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'zeta_teal'
+  shouldLerpTrace:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Focus the tab bar once launch is done
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; echo {red,green,blue}-butter; true ; } > /tmp/room2/20270317
+            echo "max_line=$(wc -L </tmp/room2/20270317)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - '20270317'
+  loopCommandAdapter:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/room2
+      - run:
+          name: Chill the lab notebook before migration
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; find /etc -maxdepth 1 -type f -printf '%s\n' 2> /dev/null|awk '{printf "%05d\n", $1}'|cut -c1-27|tr a-z A-Z; true ; } > /tmp/room2/hwfx
+            echo "max_line=$(wc -L </tmp/room2/hwfx)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'hwfx'
+  Plugin-Form-Total:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Prepare handoff B
+          command: |
+            mkdir -p /tmp/room2
+            { set +o pipefail 2>/dev/null; sort </etc/shells >'/tmp/settings.sent.dat' && head -n 3 '/tmp/settings.sent.dat'; true ; } > /tmp/room2/hollowDelta
+            echo "max_line=$(wc -L </tmp/room2/hollowDelta)"
+      - persist_to_workspace:
+          root: /tmp/room2
+          paths:
+            - 'hollowDelta'
+workflows:
+  matrix:
+    jobs:
+      - PUZZLE_IMPORT_SLOW_CONNECT
+      - mutantSys:
+          requires:
+            - PUZZLE_IMPORT_SLOW_CONNECT
+      - canary:
+          requires:
+            - mutantSys
+      - limit_ref:
+          requires:
+            - mutantSys
+      - IRL:
+          requires:
+            - limit_ref
+      - green-light:
+          requires:
+            - IRL
+      - nav-price-rounded:
+          requires:
+            - IRL
+      - copy39:
+          requires:
+            - nav-price-rounded
+      - add-webhook-reload:
+          requires:
+            - copy39
+      - buff3r:
+          requires:
+            - copy39
+      - virtualPtr:
+          requires:
+            - buff3r
+      - feb1-release:
+          requires:
+            - virtualPtr
+      - Where-LabelObject
+      - ii
+      - huge_env
+      - d-01:
+          requires:
+            - Where-LabelObject
+            - ii
+            - huge_env
+      - update-session-bug:
+          requires:
+            - Where-LabelObject
+            - ii
+            - huge_env
+      - v5-ga:
+          requires:
+            - Where-LabelObject
+            - ii
+            - huge_env
+      - jun24-cleanup:
+          requires:
+            - Where-LabelObject
+            - ii
+            - huge_env
+      - jan10-ship:
+          requires:
+            - Where-LabelObject
+            - ii
+            - huge_env
+      - cook-it:
+          requires:
+            - Where-LabelObject
+            - ii
+            - huge_env
+      - lets-go:
+          requires:
+            - Where-LabelObject
+            - ii
+            - huge_env
+      - MVC_Trace
+      - commit_server_throws:
+          requires:
+            - MVC_Trace
+      - v9-alpha5:
+          requires:
+            - commit_server_throws
+      - ichDeep:
+          requires:
+            - commit_server_throws
+      - subPointer9:
+          requires:
+            - ichDeep
+      - d-2:
+          requires:
+            - subPointer9
+      - Menu823:
+          requires:
+            - subPointer9
+      - shouldLerpTrace:
+          requires:
+            - Menu823
+      - preview-v1:
+          requires:
+            - shouldLerpTrace
+      - controller-579:
+          requires:
+            - shouldLerpTrace
+      - loopCommandAdapter:
+          requires:
+            - controller-579
+      - PrepareProd:
+          requires:
+            - loopCommandAdapter
+      - fronttween:
+          requires:
+            - loopCommandAdapter
+      - Plugin-Form-Total:
+          requires:
+            - fronttween
+      - refactor-6310:
+          requires:
+            - Plugin-Form-Total
+      - fixture_in_l
+      - produce-end-to-end-regression-suite:
+          requires:
+            - fixture_in_l
+      - t-primary:
+          requires:
+            - fixture_in_l
+      - DATA-885:
+          requires:
+            - t-primary
+      - Psi_dot:
+          requires:
+            - t-primary
+      - produce-production-release-candidate:
+          requires:
+            - Psi_dot
+      - text_platinum:
+          requires:
+            - Psi_dot
+      - full-send:
+          requires:
+            - text_platinum
+      - on_retry:
+          requires:
+            - text_platinum
+      - wen-smoke:
+          requires:
+            - on_retry
+      - br6:
+          requires:
+            - on_retry
+      - p-3:
+          requires:
+            - br6
+      - noise-6:
+          requires:
+            - br6
+      - java17-release:
+          requires:
+            - noise-6
+      - uat-dev-63:
+          requires:
+            - noise-6
+      - vb-3:
+          requires:
+            - uat-dev-63
+      - chip__overlay
+      - globeish
+      - STAGE_PROD:
+          requires:
+            - chip__overlay
+            - globeish
+      - titan2-rc:
+          requires:
+            - chip__overlay
+            - globeish
+      - fix-1966:
+          requires:
+            - chip__overlay
+            - globeish
+      - nova-alpha:
+          requires:
+            - chip__overlay
+            - globeish
+      - wip-db:
+          requires:
+            - chip__overlay
+            - globeish
+      - INFRA-203:
+          requires:
+            - chip__overlay
+            - globeish
